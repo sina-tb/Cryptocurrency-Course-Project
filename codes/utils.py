@@ -44,9 +44,8 @@ def create_OP_CHECKSIG_signature_two_outputs(txin, first_txout, second_txout, tx
 
 def create_OP_CHECKSIG_signature(txin, txout, txin_scriptPubKey, seckey):
     tx = CMutableTransaction([txin], [txout])
-    sighash = SignatureHash(CScript(txin_scriptPubKey), tx,
-                            0, SIGHASH_ALL)
-    sig = seckey.sign(sighash) + bytes([SIGHASH_ALL])
+    signature_hash = SignatureHash(CScript(txin_scriptPubKey), tx, 0, SIGHASH_ALL)
+    sig = seckey.sign(signature_hash) + bytes([SIGHASH_ALL])
     return sig
 
 def create_witness(txin, txout, redeem_script, seckey, amount_spent):
@@ -56,8 +55,8 @@ def create_witness(txin, txout, redeem_script, seckey, amount_spent):
     sig = seckey.sign(sighash) + bytes([SIGHASH_ALL])
     return sig
 
-def create_signed_transaction_two_outputs(txin, first_txout, second_txout, txin_scriptPubKey,
-                              txin_scriptSig):
+def create_signed_transaction_two_outputs(txin, first_txout, second_txout, txin_scriptPubKey,txin_scriptSig):
+
     tx = CMutableTransaction([txin], [first_txout, second_txout])
     txin.scriptSig = CScript(txin_scriptSig)
     VerifyScript(txin.scriptSig, CScript(txin_scriptPubKey),
